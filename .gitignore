@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Zapper.Gui/Zapper.Gui.csproj
+/Zapper.Console/Zapper.Console.csproj
+/Zapper.Models/Zapper.Models.csproj
