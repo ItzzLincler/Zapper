@@ -1,0 +1,107 @@
+﻿@page "/"
+@using Zapper.Gui.Data;
+@using Zapper.Api.Models;
+@inject ProductFetcher fetcher;
+@using Microsoft.AspNetCore.Components;
+
+<PageTitle>Index</PageTitle>
+
+@*<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />*@
+<div class="container" style="margin:10px">
+	<input class="" @bind-value="SearchTerm" @onkeydown="() => Search()" placeholder="Search" @bind-value:event="oninput" />
+	<button @onclick="() => Search()">Search</button>
+</div>
+
+<div class="">
+	<div class="row">
+		<div class="col-10">
+
+			<table class="table table-hover table-bordered table-responsive">
+				<thead class="sticky-top" style="background-color:#ffffff;">
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Source</th>
+						<th scope="col">Name</th>
+						<th scope="col">Price</th>
+						<th scope="col">Highest</th>
+						<th scope="col">Lowest</th>
+						<th scope="col">Last Checked</th>
+						<th scope="col">Link</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var (index, product) in indexedProducts)
+					{
+						<tr>
+							<th>@(index + 1)</th>
+							<td>@product.ProductSource</td>
+							<td>@product.Name</td>
+							<td>@product.CurrentPrice</td>
+							<td class="link-warning">@product.HighestPrice</td>
+							<td class="link-primary">@product.LowestPrice</td>
+							<td>@product.LastChecked</td>
+							<td><a href="@product.ProductLink">@product.ProductSource</a></td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		<div class="col-2">
+			<div class="card sticky-top">
+				<div class="card-header">
+					<h5>Page: @currentPage</h5>
+				</div>
+				<div class="card-body">
+					<nav aria-label="Page navigation">
+						<ul class="pagination">
+							<li class="page-item"><a @onclick="() => GetPage(1)" class="page-link">First</a></li>
+							<li class="page-item"><a @onclick="GetPrivousPage" class="page-link">Previous</a></li>
+							<li class="page-item"><a @onclick="GetNextPage" class="page-link">Next</a></li>
+							<li class="page-item"><a @onclick="() => GetPage(int.MaxValue)" class="page-link">Last</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code
+{
+	private List<(int, ScrapedProduct)> indexedProducts = new();
+	private int currentPage = 1;
+	private string SearchTerm = "";
+
+	protected override async Task OnInitializedAsync()
+	{
+		indexedProducts = await fetcher.GetIndexedPage(currentPage);
+	}
+
+	protected async Task GetPage(int page)
+	{
+		indexedProducts = await fetcher.GetIndexedPage(page);
+		currentPage = page;
+	}
+
+	protected async Task GetPrivousPage()
+	{
+		indexedProducts = await fetcher.GetIndexedPage(currentPage - 1);
+		currentPage--;
+	}
+
+	protected async Task GetNextPage()
+	{
+		indexedProducts = await fetcher.GetIndexedPage(currentPage + 1);
+		currentPage++;
+	}
+
+	protected async Task Search()
+	{
+		this.indexedProducts = await fetcher.Search(SearchTerm);
+	}
+
+}

@@ -1,0 +1,60 @@
+﻿@page "/fetchdata"
+
+<PageTitle>Weather forecast</PageTitle>
+
+@using Zapper.Api.Models;
+@inject Zapper.Gui.Data.ProductFetcher fetcher;
+
+<h2>Latest changes:</h2>
+
+@if (products.Count() == 0)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<div class="">
+		<div class="row">
+			@foreach (var product in products)
+			{
+				<div class="col-2">
+
+					<div class="card ">
+						<img src="@($"https://localhost:7216/Images/{product.ImagePath}")" class="card-img-top" alt="..." />
+						<div class="card-header">
+							<a href="@product.ProductLink" class="product-link text-black" style="font-size:18px"> 
+								@product.Name
+							</a>
+						</div>
+						<div class="card-body">
+							<div class="d-flex justify-content-between">
+								<span>Current Price:</span><h4>@product.CurrentPrice</h4>
+							</div>
+							<div class="d-flex justify-content-between">
+								<span>Lowest Price:</span><h5 class="text-decoration-line-through">@product.LowestPrice</h5>
+							</div>
+							<div class="d-flex justify-content-between">
+								<span>Highest Price:</span><h6 class="text-decoration-line-through opacity-75">@product.HighestPrice</h6>
+							</div>
+							<div class="d-flex justify-content-between">
+								<h5>Last Changes:</h5><h5 class="">@product.LastChanged.ToLocalTime()</h5>
+							</div>
+							<div class="d-flex justify-content-between">
+								<h5> - </h5><h5 class="">@product.Changes.Count</h5>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+}
+
+@code {
+	private List<ScrapedProduct> products = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		products = await fetcher.GetLatestChanged(100);
+	}
+}

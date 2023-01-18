@@ -10,21 +10,6 @@ namespace Zapper.Api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ProductPriceChanges",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Changed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PreviousPrice = table.Column<double>(type: "double precision", nullable: true),
-                    CurrentPrice = table.Column<double>(type: "double precision", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductPriceChanges", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ScrapedProducts",
                 columns: table => new
                 {
@@ -40,13 +25,42 @@ namespace Zapper.Api.Migrations
                     ProductLink = table.Column<string>(type: "text", nullable: false),
                     ProductSource = table.Column<int>(type: "integer", nullable: false),
                     ProductType = table.Column<string>(type: "text", nullable: false),
-                    Manufacturer = table.Column<string>(type: "text", nullable: false),
-                    ImageUri = table.Column<string>(type: "text", nullable: false)
+                    ImageUri = table.Column<string>(type: "text", nullable: false),
+                    ImagePath = table.Column<string>(type: "text", nullable: true),
+                    HasImage = table.Column<bool>(type: "boolean", nullable: false),
+                    Manufacturer = table.Column<string>(type: "text", nullable: true),
+                    ManufacturerSerial = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ScrapedProducts", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "ProductPriceChanges",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Changed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PreviousPrice = table.Column<double>(type: "double precision", nullable: true),
+                    CurrentPrice = table.Column<double>(type: "double precision", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductPriceChanges", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductPriceChanges_ScrapedProducts_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "ScrapedProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPriceChanges_ProductId",
+                table: "ProductPriceChanges",
+                column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

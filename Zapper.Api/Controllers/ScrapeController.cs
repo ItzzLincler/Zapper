@@ -34,6 +34,15 @@ namespace Zapper.Api.Controllers
             return _scrapeService.GetRemainingTime(source);
         }
 
+        public IEnumerable<(ScrapedProductSource, TimeSpan)> GetAllRemainingTime()
+        {
+            var result = new List<(ScrapedProductSource, TimeSpan)>();
+            var sources = _scrapeService.GetPeriodicScrapersSources();
+            foreach (var source in sources)
+                result.Add((source, GetRemainingTime(source)));
+            return result;
+        }
+
         [HttpPost]
         public void SetPeriod(ScrapedProductSource source, TimeSpan period)
         {

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Zapper.Api.Data;
@@ -10,10 +11,11 @@ using Zapper.Api.Data;
 
 namespace Zapper.Api.Migrations
 {
-    [DbContext(typeof(ScrapedProductsContext))]
-    partial class ScrapedProductsContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ProductsContext))]
+    [Migration("20221028194709_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,6 +44,8 @@ namespace Zapper.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductId");
+
                     b.ToTable("ProductPriceChanges");
                 });
 
@@ -67,6 +71,9 @@ namespace Zapper.Api.Migrations
                     b.Property<double?>("HighestPrice")
                         .HasColumnType("double precision");
 
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("text");
+
                     b.Property<string>("ImageUri")
                         .IsRequired()
                         .HasColumnType("text");
@@ -81,7 +88,9 @@ namespace Zapper.Api.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("Manufacturer")
-                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ManufacturerSerial")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
@@ -102,6 +111,22 @@ namespace Zapper.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ScrapedProducts");
+                });
+
+            modelBuilder.Entity("Zapper.Api.Models.ProductPriceChange", b =>
+                {
+                    b.HasOne("Zapper.Api.Models.ScrapedProduct", "Product")
+                        .WithMany("Changes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Zapper.Api.Models.ScrapedProduct", b =>
+                {
+                    b.Navigation("Changes");
                 });
 #pragma warning restore 612, 618
         }

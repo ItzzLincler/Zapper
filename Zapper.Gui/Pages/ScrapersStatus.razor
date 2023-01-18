@@ -1,0 +1,48 @@
+﻿@page "/Scrapers"
+@inject Zapper.Gui.Data.ScraperFetcher fetcher
+
+<PageTitle>Scrapers</PageTitle>
+
+<div class="container" style="margin-top:20px">
+	<div class="row">
+		<h3>ScrapersStatus</h3>
+	</div>
+	<div class="row">
+		@foreach (var scraperTask in ScraperTasks)
+		{
+			<div class="col-3">
+				<div class="card bg-dark text-white">
+					<div class="card-body">
+						<h4 class="card-title">@scraperTask.Name</h4>
+						<p class="card-text">Next scrape in: @scraperTask.TimeRemaining.ToString("hh\\:mm\\:ss")</p>
+						<button class="btn btn-primary">Scrape now</button>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+
+</div>
+
+
+@code {
+	private List<string> AvailableScrapers = new();
+	private List<(string Name, TimeSpan TimeRemaining)> ScraperTasks = new();
+	private Timer timer;
+
+	protected override async Task OnInitializedAsync()
+	{
+		AvailableScrapers = await fetcher.GetAvailableScrapers();
+		timer = new((o) =>
+		{
+			CheckStatus();
+		}, new object(), TimeSpan.Zero, TimeSpan.FromSeconds(1));
+	}
+
+	protected async Task CheckStatus()
+	{
+		ScraperTasks = await fetcher.GetAllRemainingTime();
+		await InvokeAsync(() => StateHasChanged());
+
+	}
+}

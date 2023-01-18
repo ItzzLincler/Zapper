@@ -6,20 +6,26 @@ namespace Zapper.Api.Services
 {
     public class PeriodicScrapingTask : IDisposable
     {
-        public IScraper Scraper { get; private set; }
-        private readonly AsyncQueue<IEnumerable<IScraper>> jobQueue;
+        public ScraperBase Scraper { get; private set; }
+        private readonly AsyncQueue<IEnumerable<ScraperBase>> jobQueue;
         private TimeSpan timeSpan;
         private CancellationTokenSource tokenSource;
         private Task task;
         private Stopwatch watch = new Stopwatch();
+        public bool IsRunning { get; private set; }
+        public ScrapedProductSource Source { get { return Scraper.Source; } }
+        public PeriodicScrapingTask(AsyncQueue<IEnumerable<ScraperBase>> jobQueue, ScraperBase scraper, TimeSpan timeSpan) : this(jobQueue, scraper, timeSpan, TimeSpan.Zero)
+        {
 
-        public PeriodicScrapingTask(AsyncQueue<IEnumerable<IScraper>> jobQueue, IScraper scraper, TimeSpan timeSpan)
+        }
+
+        public PeriodicScrapingTask(AsyncQueue<IEnumerable<ScraperBase>> jobQueue, ScraperBase scraper, TimeSpan timeSpan, TimeSpan Delay)
         {
             this.timeSpan = timeSpan;
             this.Scraper = scraper;
             this.jobQueue = jobQueue;
             this.tokenSource = new CancellationTokenSource();
-            Start(tokenSource.Token);
+            Task.Delay(Delay).ContinueWith(t => Start(tokenSource.Token));
         }
 
         public TimeSpan RemainingTime() => timeSpan - watch.Elapsed;
@@ -57,8 +63,6 @@ namespace Zapper.Api.Services
         {
             Stop();
         }
-
-        public ScrapedProductSource GetScraperSource() => Scraper.GetSource();
 
 
     }

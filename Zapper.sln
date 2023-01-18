@@ -5,7 +5,13 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapper", "Zapper\Zapper.csproj", "{F9F6069F-9425-415A-8403-EF8274D205E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zapper.Api", "Zapper.Api\Zapper.Api.csproj", "{E7AC2D23-8666-4629-A5E2-C0FCDE977F09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapper.Api", "Zapper.Api\Zapper.Api.csproj", "{E7AC2D23-8666-4629-A5E2-C0FCDE977F09}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapper.Gui", "Zapper.Gui\Zapper.Gui.csproj", "{009CFEDA-5A60-43A6-948D-E3F6DE7A6B77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zapper.Models", "Zapper.Models\Zapper.Models.csproj", "{80BAD9D2-B382-43B8-AB84-EFC81511EF58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zapper.Console", "Zapper.Console\Zapper.Console.csproj", "{B96279B2-0CD6-444A-B090-74B5A08A9078}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{E7AC2D23-8666-4629-A5E2-C0FCDE977F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7AC2D23-8666-4629-A5E2-C0FCDE977F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7AC2D23-8666-4629-A5E2-C0FCDE977F09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{009CFEDA-5A60-43A6-948D-E3F6DE7A6B77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{009CFEDA-5A60-43A6-948D-E3F6DE7A6B77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{009CFEDA-5A60-43A6-948D-E3F6DE7A6B77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{009CFEDA-5A60-43A6-948D-E3F6DE7A6B77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80BAD9D2-B382-43B8-AB84-EFC81511EF58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80BAD9D2-B382-43B8-AB84-EFC81511EF58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80BAD9D2-B382-43B8-AB84-EFC81511EF58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80BAD9D2-B382-43B8-AB84-EFC81511EF58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B96279B2-0CD6-444A-B090-74B5A08A9078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B96279B2-0CD6-444A-B090-74B5A08A9078}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B96279B2-0CD6-444A-B090-74B5A08A9078}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B96279B2-0CD6-444A-B090-74B5A08A9078}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
